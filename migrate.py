@@ -1,3 +1,5 @@
+# python3 ./migrate.py ./tests/export.csv ./tests/import.csv
+
 import sys
 import csv
 import re
