@@ -1,0 +1,35 @@
+= Prepare Avira Password Manager CSV export for Google Passwords import
+
+Avira exports passwords like:
+.Avira Export
+|===
+| name | website | username | secondary_username | password | notes
+|===
+
+But Google requires something like:
+
+.https://support.google.com/accounts/answer/10500247[Google Password Import]
+|===
+| url | username | password
+|===
+
+== Usage
+[source, cmd]
+----
+python migrate.py <export-file> <import-file>
+----
+
+=== Sample Usage
+[source, cmd]
+----
+python migrate.py export.csv import.csv
+----
+
+== Jobs done by `migrate.py`
+* Use only importable columns (`url`, `username`, `password`)
+* Arange columns in correct order (1. `url`, 2. `username`, 3. `password`)
+* Also Google required full URLs but Avira sometimes stores entries without a network protocoll (http/https) so URLs will be fixed too
+* Removes entries without values for all required columns
+
+== Open Jobs
+* As Google only accepts ASCII urls but Avira can export urls including emojis they should be converted to punycode
