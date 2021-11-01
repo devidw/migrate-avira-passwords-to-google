@@ -1,6 +1,7 @@
 = Prepare Avira Password Manager CSV export for Google Passwords import
 
 Avira exports passwords like:
+
 .Avira Export
 |===
 | name | website | username | secondary_username | password | notes
