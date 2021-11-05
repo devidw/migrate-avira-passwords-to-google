@@ -16,13 +16,13 @@ But Google requires something like:
 == Usage
 [source, cmd]
 ----
-python migrate.py <export-file> <import-file>
+python migrate.py <export-file> <import-file> <failed-file>
 ----
 
 === Sample Usage
 [source, cmd]
 ----
-python migrate.py export.csv import.csv
+python migrate.py export.csv import.csv failed.csv
 ----
 
 == Jobs done by `migrate.py`
