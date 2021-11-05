@@ -1,4 +1,5 @@
 # python3 ./migrate.py ./tests/export.csv ./tests/import.csv
+# python3 ./migrate.py ./avira.csv ./nomatter.csv ./failed.csv
 
 import sys
 import csv
@@ -24,31 +25,38 @@ def validentry(entry):
     return True
 
 
+def csv_writer(data, path):
+    with open(path, 'w', newline='') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=data[0].keys())
+        writer.writeheader()
+        for entry in data:
+            writer.writerow(entry)
+
+
 # print(sys.argv)
-if len(sys.argv) != 3:
-    raise ValueError('Not enough arguments received')
+if len(sys.argv) != 4:
+    raise ValueError('Wrong number of arguments received (expecting 3)')
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
+failed_file = sys.argv[3]
 
 input_data = csv.DictReader(open(input_file))
 output_data = []
+failed_data = []
 
 for input_entry in input_data:
-    if not validentry(input_entry):
-        continue
-    full_url = formaturl(input_entry['website'])
-    # print(full_url)
-    output_entry = {
-        'url': full_url,
-        'username': input_entry['username'],
-        'password': input_entry['password'],
-    }
-    output_data.append(output_entry)
+    if validentry(input_entry):
+        full_url = formaturl(input_entry['website'])
+        # print(full_url)
+        output_entry = {
+            'url': full_url,
+            'username': input_entry['username'],
+            'password': input_entry['password'],
+        }
+        output_data.append(output_entry)
+    else:
+        failed_data.append(input_entry)
 
-# print(output_data)
-output_keys = output_data[0].keys()
-with open(output_file, 'w', newline='') as output_csv:
-    dict_writer = csv.DictWriter(output_csv, output_keys)
-    dict_writer.writeheader()
-    dict_writer.writerows(output_data)
+csv_writer(output_data, output_file)
+csv_writer(failed_data, failed_file)
